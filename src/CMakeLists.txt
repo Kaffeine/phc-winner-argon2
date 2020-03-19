@@ -58,11 +58,6 @@ else()
         SUFFIX ".so.${ABI_VERSION}")
 endif()
 
-install(TARGETS argon2-shared
-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
 
 if (UNIX)
     macro(install_symlink filepath sympath)
@@ -73,6 +68,18 @@ if (UNIX)
 
     install_symlink(${CMAKE_SHARED_LIBRARY_PREFIX}argon2${CMAKE_SHARED_LIBRARY_SUFFIX}.${ABI_VERSION}
                     ${CMAKE_SHARED_LIBRARY_PREFIX}argon2${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()
+
+if (BUILD_SHARED_LIBS)
+    install(TARGETS argon2-shared
+        ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+else()
+    set_target_properties(argon2-shared PROPERTIES
+        EXCLUDE_FROM_ALL TRUE
+    )
 endif()
 
 ##########
@@ -104,10 +111,15 @@ set_target_properties(argon2-static PROPERTIES
     OUTPUT_NAME ${ARGON2_STATIC_LIB_NAME}
     PDB_OUTPUT_NAME "argon2")
 
-install(TARGETS argon2-static
-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+if (BUILD_SHARED_LIBS)
+    set_target_properties(argon2-static PROPERTIES
+        EXCLUDE_FROM_ALL TRUE
     )
-
+else()
+    install(TARGETS argon2-static
+        ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+endif()
 
 install(FILES "${CMAKE_SOURCE_DIR}/include/argon2.h"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
