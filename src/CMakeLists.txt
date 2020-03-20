@@ -29,6 +29,7 @@ endif()
 # SHARED #
 ##########
 add_library (argon2-shared SHARED ${ARGON2_SRC})
+target_compile_definitions(argon2-shared PRIVATE A2_BUILD)
 
 target_compile_definitions(argon2-shared
     PUBLIC "A2_VISCTL")
@@ -86,6 +87,7 @@ endif()
 # STATIC #
 ##########
 add_library (argon2-static STATIC ${ARGON2_SRC})
+target_compile_definitions(argon2-static PRIVATE A2_BUILD)
 
 if (MULTITHREADS)
     target_link_libraries(argon2-static PUBLIC Threads::Threads)
@@ -136,6 +138,7 @@ endif()
 # STATIC for genkat (provide sew points for logging) #
 ######################################################
 add_library (argon2-static-genkat STATIC ${ARGON2_SRC})
+target_compile_definitions(argon2-static-genkat PRIVATE A2_BUILD)
 
 if (MULTITHREADS)
     target_link_libraries(argon2-static-genkat PUBLIC Threads::Threads)

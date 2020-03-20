@@ -28,16 +28,28 @@ extern "C" {
 
 /* Symbols visibility control */
 /* A2_VISCTL defined if the visibility control is needed (shared library) */
+/* A2_BUILD defined during the library build */
 
 #ifdef A2_VISCTL
-#define ARGON2_PUBLIC __attribute__((visibility("default")))
-#define ARGON2_LOCAL __attribute__ ((visibility ("hidden")))
-#elif defined(_MSC_VER)
-#define ARGON2_PUBLIC __declspec(dllexport)
-#define ARGON2_LOCAL
+#  ifdef _MSC_VER
+#    define ARGON2_DECL_EXPORT __declspec(dllexport)
+#    define ARGON2_DECL_IMPORT __declspec(dllimport)
+#    define ARGON2_DECL_HIDDEN
+#  else
+#    define ARGON2_DECL_EXPORT __attribute__((visibility("default")))
+#    define ARGON2_DECL_IMPORT __attribute__((visibility("default")))
+#    define ARGON2_DECL_HIDDEN __attribute__((visibility("hidden")))
+#  endif
+
+#  ifdef A2_BUILD
+#    define ARGON2_PUBLIC ARGON2_DECL_EXPORT
+#  else
+#    define ARGON2_PUBLIC ARGON2_DECL_IMPORT
+#  endif // A2_BUILD
+#  define ARGON2_LOCAL ARGON2_DECL_HIDDEN
 #else
-#define ARGON2_PUBLIC
-#define ARGON2_LOCAL
+#  define ARGON2_PUBLIC
+#  define ARGON2_LOCAL
 #endif
 
 /*
