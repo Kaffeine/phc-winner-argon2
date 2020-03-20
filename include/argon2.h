@@ -27,6 +27,8 @@ extern "C" {
 #endif
 
 /* Symbols visibility control */
+/* A2_VISCTL defined if the visibility control is needed (shared library) */
+
 #ifdef A2_VISCTL
 #define ARGON2_PUBLIC __attribute__((visibility("default")))
 #define ARGON2_LOCAL __attribute__ ((visibility ("hidden")))
