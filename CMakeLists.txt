@@ -77,6 +77,17 @@ else()
     add_subdirectory(latex)
 endif()
 
+if (TESTS AND ANDROID)
+    set (SUPPORTED_ANDROID_ABIS
+        x86
+        x86_64
+    )
+    if (NOT "${ANDROID_ABI}" IN_LIST SUPPORTED_ANDROID_ABIS)
+        set(TESTS OFF)
+        message(STATUS "Tests are not support on ${ANDROID_ABI}")
+    endif()
+endif()
+
 if (NOT TESTS)
     message(STATUS "Skipping tests")
 else()
