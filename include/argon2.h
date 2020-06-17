@@ -31,7 +31,7 @@ extern "C" {
 /* A2_BUILD defined during the library build */
 
 #ifdef A2_VISCTL
-#  ifdef _MSC_VER
+#  if defined(_MSC_VER) || defined(__MINGW32__)
 #    define ARGON2_DECL_EXPORT __declspec(dllexport)
 #    define ARGON2_DECL_IMPORT __declspec(dllimport)
 #    define ARGON2_DECL_HIDDEN
