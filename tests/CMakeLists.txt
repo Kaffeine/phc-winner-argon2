@@ -14,6 +14,12 @@ add_test(NAME argon2-tests
 add_executable(genkat "genkat.c")
 target_link_libraries(genkat PRIVATE argon2-static-genkat)
 
+if (MINGW)
+    # Fix for
+    #     error: unknown conversion type character 'l' in format
+    target_compile_definitions(genkat PRIVATE "__USE_MINGW_ANSI_STDIO=1")
+endif()
+
 if (WIN32)
     add_test(NAME argon2-genkat
         COMMAND "powershell" "-Command"
